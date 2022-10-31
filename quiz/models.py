@@ -13,3 +13,14 @@ class Pet(models.Model):
 
     def __str__(self):
         return self.name
+
+class Question(models.Model):
+    '''Single question model'''
+
+    category = models.ForeignKey(Category, on_delete= models.PROTECT)
+    text = models.TextField()
+
+    true_answer = models.CharField(max_length=64)
+    false_answer1 = models.CharField(max_length=64)
+    false_answer2 = models.CharField(max_length=64)
+    false_answer3 = models.CharField(max_length=64)
