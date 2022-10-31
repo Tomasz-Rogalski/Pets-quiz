@@ -1,7 +1,9 @@
 
 from django.urls import path
-import quiz.views
+from . import views
 
 app_name='quiz'
-urlpatterns = [   
+
+urlpatterns = [
+    path('home', views.home, name='home')
 ]
