@@ -8,16 +8,14 @@ def home(request):
 
 def question(request, question_id):
     question = Question.objects.get(id=question_id)
-    answers_dict = {
-        question.true_answer:True,
-        question.false_answer1:False,
-        question.false_answer2:False,
-        question.false_answer3:False,
-        }
+    answers = [
+        question.true_answer,
+        question.false_answer1,
+        question.false_answer2,
+        question.false_answer3,
+        ]
+    shuffle(answers)
 
-    answers_list = list(answers_dict.keys())
-    shuffle(answers_list)
-    
-    context = {'question':question, 'answers':answers_list}
+    context = {'question':question, 'answers':answers}
     return render(request, 'quiz/question.html', context)
     
