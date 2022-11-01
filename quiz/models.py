@@ -1,4 +1,5 @@
 from django.db import models
+from random import shuffle
 
 class Category(models.Model):
     """Category type of questions, first of 2 base game options"""
@@ -24,3 +25,13 @@ class Question(models.Model):
     false_answer1 = models.CharField(max_length=64)
     false_answer2 = models.CharField(max_length=64)
     false_answer3 = models.CharField(max_length=64)
+
+    answers = {true_answer: True, 
+            false_answer1: False,
+            false_answer2: False,
+            false_answer3: False,}
+
+    def check_trueness(self, answer):
+        return self.answers[answer]
+
+
