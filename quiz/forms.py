@@ -9,5 +9,5 @@ class GameForm(forms.ModelForm):
     widgets =  {
             'player_name' : forms.TextInput(attrs={'class': 'form-control'}),
             'category': forms.RadioSelect(attrs={'class': 'd-inline'}),
-            'difficulty': forms.RadioSelect(attrs={'class': 'd-inline'}),
+            'pet': forms.RadioSelect(attrs={'class': 'd-inline'}),
             }
