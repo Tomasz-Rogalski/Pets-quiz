@@ -56,12 +56,13 @@ class Game(models.Model):
         self.total_questions_nr += 1
 
 
-    def __init__(self):
+    def start_new_game(self):
         "Create, shuffle questionset and get first question"
         self.get_category_questions()
         self.shuffle_questions()
         self.create_questionset()
         self.get_new_question()
+
     
 
     def add_score(self):        

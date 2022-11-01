@@ -1,4 +1,4 @@
-from models import Game
+from .models import Game
 
 from django import forms
 

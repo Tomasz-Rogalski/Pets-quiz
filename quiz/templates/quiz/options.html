@@ -1,0 +1,22 @@
+{% extends 'quiz/base.html' %}
+{% block content %}
+
+<h1>Options</h1>
+<form action="{% url 'quiz:options' %}" method="post" class = 'row'>
+    {% csrf_token %}
+    <div class="mb-4 col-12">
+      <label for="player_name" class="form-label">Enter your name:</label>
+      {{form.player_name}}
+    </div>
+    <div class="mb-4 col-6">
+      <label for="player_name" class="form-label">Select category:</label>
+      {{form.category}}
+    </div>
+    <div class="mb-4 col-6">
+      <label for="player_name" class="form-label">Select your pet:</label>
+      {{form.pet}}
+    </div>
+    <div class="col-12"><button class="dbtn rounded">Start game</button></div>    
+  </form>
+
+{% endblock content %}
