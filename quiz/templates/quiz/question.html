@@ -1,0 +1,15 @@
+{% extends 'quiz/base.html' %}
+{% block content %}
+
+<h1>Question</h1>
+<p>{{question.text}}</p>
+<ul>
+	{% for answer in answers %}
+		<li>{{answer}}</li>
+	{% endfor %}
+</ul>
+
+
+
+
+{% endblock content %}
