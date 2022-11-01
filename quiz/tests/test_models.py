@@ -1,4 +1,4 @@
-from quiz.models import Category
+from quiz.models import Category, Question
 from mixer.backend.django import mixer
 import pytest
 
@@ -15,5 +15,5 @@ class TestModels():
     #     assert str(category) == category.name
 
     def test_pet_str(self):
-        category = Category.objects.create(name='MyTestPet')
-        assert str(category) == category.name
+        pet = Category.objects.create(name='MyTestPet')
+        assert str(pet) == pet.name
