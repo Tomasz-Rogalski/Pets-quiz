@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Question
 from random import shuffle
+from .forms import GameForm
 
 def home(request):
     context = {}
@@ -18,4 +19,17 @@ def question(request, question_id):
 
     context = {'question':question, 'answers':answers}
     return render(request, 'quiz/question.html', context)
+
+def game(request):
+    if request.method != 'POST':
+        form = GameForm()
+        context = {'form':form}
+        return render (request, 'quiz/options.html', context)
+    else:
+        form = GameForm(date=request.POST)
+        if form.is_valid:
+            game=form.save()
+        return redirect ('quiz:question', game.id)
+
+
     
