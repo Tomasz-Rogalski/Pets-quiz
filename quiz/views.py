@@ -23,13 +23,14 @@ def home(request):
 def question(request, game_id):
 
     game = Game.objects.get(id=game_id)
+    player_answer = request.POST.get('player_answer')
 
     if game.current_question_nr >=game.total_questions_nr:
         return redirect('quiz:home') #summary
     else:
         if request.method == 'POST':
-            # if good answer 
-                    # game.add_score()
+            if game.question.answer_is_true(player_answer):
+                game.add_score()
             game.get_new_question()
             question = game.question
             question.shuffle_answers()
