@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Question
+from .models import Game
 from random import shuffle
 from .forms import GameForm
 
@@ -7,16 +7,37 @@ def home(request):
     context = {}
     return render(request, 'quiz/home.html', context)
 
-def question(request, question_id):
-    question = Question.objects.get(id=question_id)
-    answers = [
-        question.true_answer,
-        question.false_answer1,
-        question.false_answer2,
-        question.false_answer3,
-        ]
-    shuffle(answers)
+# def question(request, question_id):
+#     question = Question.objects.get(id=question_id)
+#     answers = [
+#         question.true_answer,
+#         question.false_answer1,
+#         question.false_answer2,
+#         question.false_answer3,
+#         ]
+#     shuffle(answers)
 
+#     context = {'question':question, 'answers':answers}
+#     return render(request, 'quiz/question.html', context)
+
+def question(request, game_id):
+
+    game = Game.objects.get(id=game_id)
+
+    if game.current_question_nr >=game.total_questions_nr:
+        return redirect('quiz:home') #summary
+    else:
+        if request.method == 'POST':
+            # if good answer 
+                    # game.add_score()
+            game.get_new_question()
+            question = game.question
+            question.shuffle_answers()
+            answers = question.answers
+
+        elif request.method != 'POST':
+            game.start_new_game()
+            
     context = {'question':question, 'answers':answers}
     return render(request, 'quiz/question.html', context)
 
