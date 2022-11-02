@@ -25,21 +25,37 @@ def question(request, game_id):
     game = Game.objects.get(id=game_id)
     player_answer = request.POST.get('player_answer')
 
-    if game.current_question_nr >=game.total_questions_nr:
+    
+    
+    print ('******************************')
+    print ('ID', game.id)
+    print (request.POST)
+    print ('questionset', game.questionset)
+    print ('currentq', game.current_question_nr)
+    print ('******************************')    
+
+    if game.current_question_nr >= game.total_questions_nr:
         return redirect('quiz:home') #summary
     else:
         if request.method == 'POST':
-            if game.question.answer_is_true(player_answer):
-                game.add_score()
+            # if game.question.answer_is_true(player_answer):
+            #     game.add_score()
             game.get_new_question()
+            game.save()
             question = game.question
             question.shuffle_answers()
             answers = question.answers
 
         elif request.method != 'POST':
             game.start_new_game()
+            print ('questionset2', game.questionset)
+            question = game.question
+            question.shuffle_answers()
+            print ('questionset3', game.questionset)
+            answers = question.answers
+            game.save()
             
-    context = {'question':question, 'answers':answers}
+    context = {'question':question, 'answers':answers, 'game_id':game.id}
     return render(request, 'quiz/question.html', context)
 
 def options(request):

@@ -45,15 +45,17 @@ class Game(models.Model):
     player_name = models.CharField(max_length = 24)
     is_finished =models.BooleanField(default=False)
 
-    total_score = 0
-    current_question_nr = 0
-    total_questions_nr = 3
+    total_score = models.IntegerField(default = 0)
+    current_question_nr = models.IntegerField(default = 0)
+    total_questions_nr = models.IntegerField(default = 5)
 
     questionset = []
     question = None
 
+    
+
     def get_category_questions(self):
-        self.questionset = Question.objects.filter(category=self.category)
+        self.questionset = list(Question.objects.filter(category=self.category))
 
     def shuffle_questions(self):
         shuffle(list(self.questionset))
@@ -63,14 +65,16 @@ class Game(models.Model):
 
     def get_new_question(self):        
         self.question= self.questionset[self.current_question_nr]
-        self.total_questions_nr += 1
+        self.current_question_nr += 1
+        self.save()
 
     def start_new_game(self):
         "Create, shuffle questionset and get first question"
         self.get_category_questions()
         self.shuffle_questions()
         self.create_questionset()
-        self.get_new_question()    
+        self.get_new_question()
+        self.save()
 
     def add_score(self):        
         self.total_score += 10

@@ -6,6 +6,6 @@ app_name='quiz'
 
 urlpatterns = [
     path('home', views.home, name='home'),
-    path('question/<int:question_id>/', views.question, name='question'),
+    path('question/<int:game_id>/', views.question, name='question'),
     path('options', views.options, name='options'),
 ]
