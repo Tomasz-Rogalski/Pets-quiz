@@ -26,6 +26,17 @@ class Question(models.Model):
     false_answer2 = models.CharField(max_length=64)
     false_answer3 = models.CharField(max_length=64)
 
+    answers = [true_answer,false_answer1,false_answer2,false_answer3,]
+
+    def shuffle_answers(self):
+        shuffle(self.answers)
+
+    def answer_is_true(self, answer):
+        if answer == self.true_answer:
+            return True
+        else:
+            return False
+
 
 class Game(models.Model):
     'Model with game statistics and options'
@@ -37,7 +48,6 @@ class Game(models.Model):
     total_score = 0
     current_question_nr = 0
     total_questions_nr = 3
-
 
     questionset = []
     question = None
@@ -55,15 +65,12 @@ class Game(models.Model):
         self.question= self.questionset[self.current_question_nr]
         self.total_questions_nr += 1
 
-
     def start_new_game(self):
         "Create, shuffle questionset and get first question"
         self.get_category_questions()
         self.shuffle_questions()
         self.create_questionset()
-        self.get_new_question()
-
-    
+        self.get_new_question()    
 
     def add_score(self):        
         self.total_score += 10
