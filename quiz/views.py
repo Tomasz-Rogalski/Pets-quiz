@@ -49,7 +49,7 @@ def question(request, game_id):
         return render(request, 'quiz/question.html', context)
     
     else:
-        return redirect('quiz:home')
+        return redirect('quiz:scoreboard', game.id)
 
 def options(request):
     if request.method != 'POST':
@@ -61,6 +61,15 @@ def options(request):
         if form.is_valid:
             game=form.save()
         return redirect ('quiz:question', game.id)
+
+
+def scoreboard(request, game_id=0):
+    if game_id:
+        game = Game.objects.get(id=game_id)
+        context = {'game':game}
+    else:
+        context= {}
+    return render(request, 'quiz/scoreboard.html', context)
 
 
     
