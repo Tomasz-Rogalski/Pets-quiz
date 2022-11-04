@@ -3,8 +3,9 @@
 
 <h1>Question</h1>
 <p>{{question.text}}</p>
-<p>{{game.total_score}}</p>
-<form action="{% url 'quiz:question' game_id %}" method="post">
+<p>Question:{{game.current_question_index|add:"1"}}/{{game.total_number_of_questions}}</p>
+<p>Score:{{game.total_score}}</p>
+<form action="{% url 'quiz:question' game.id %}" method="post">
 	{% csrf_token %}
 		{% for answer in answers %}
 		<div class="form-check">

@@ -25,38 +25,31 @@ def question(request, game_id):
     game = Game.objects.get(id=game_id)
     player_answer = request.POST.get('player_answer')
 
-    
-    
-    print ('******************************')
-    print ('ID', game.id)
-    print (request.POST)
-    print ('questionset', game.questionset)
-    print ('currentq', game.current_question_nr)
-    print ('******************************')    
-
-    if game.current_question_nr >= game.total_questions_nr:
-        return redirect('quiz:home') #summary
-    else:
+    while not game.is_finished:
         if request.method == 'POST':
-            # if game.question.answer_is_true(player_answer):
-            #     game.add_score()
-            game.get_new_question()
+            prev_question = game.get_question()
+            if prev_question.answer_is_true(player_answer):
+                game.add_score()
+            
+            game.current_question_index+=1            
             game.save()
-            question = game.question
-            question.shuffle_answers()
-            answers = question.answers
+            if game.current_question_index >= len(game):
+                game.is_finished = True
+                game.save()
+                continue
+            question = game.get_question()
+            answers = question.get_shuffled_answers()
 
         elif request.method != 'POST':
             game.start_new_game()
-            print ('questionset2', game.questionset)
-            question = game.question
-            question.shuffle_answers()
-            print ('questionset3', game.questionset)
-            answers = question.answers
-            game.save()
-            
-    context = {'question':question, 'answers':answers, 'game_id':game.id}
-    return render(request, 'quiz/question.html', context)
+            question = game.get_question()
+            answers = question.get_shuffled_answers()
+
+        context = {'question':question, 'answers':answers, 'game':game}
+        return render(request, 'quiz/question.html', context)
+    
+    else:
+        return redirect('quiz:home')
 
 def options(request):
     if request.method != 'POST':

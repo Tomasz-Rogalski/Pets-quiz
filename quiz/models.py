@@ -26,17 +26,19 @@ class Question(models.Model):
     false_answer2 = models.CharField(max_length=64)
     false_answer3 = models.CharField(max_length=64)
 
-    answers = [true_answer,false_answer1,false_answer2,false_answer3,]
-
-    def shuffle_answers(self):
-        shuffle(self.answers)
+    def get_shuffled_answers(self):
+        answers = [self.true_answer,
+            self.false_answer1,
+            self.false_answer2,
+            self.false_answer3,]
+        shuffle(answers)
+        return answers
 
     def answer_is_true(self, answer):
         if answer == self.true_answer:
             return True
         else:
             return False
-
 
 class Game(models.Model):
     'Model with game statistics and options'
@@ -46,38 +48,33 @@ class Game(models.Model):
     is_finished =models.BooleanField(default=False)
 
     total_score = models.IntegerField(default = 0)
-    current_question_nr = models.IntegerField(default = 0)
-    total_questions_nr = models.IntegerField(default = 5)
+    current_question_index = models.IntegerField(default = 0)
+    total_number_of_questions = models.IntegerField(default = 5)
 
-    questionset = []
-    question = None
+    questionset = models.ManyToManyField(Question)
 
-    
+    def __len__(self):
+        return self.total_number_of_questions
 
-    def get_category_questions(self):
-        self.questionset = list(Question.objects.filter(category=self.category))
-
-    def shuffle_questions(self):
-        shuffle(list(self.questionset))
-
-    def create_questionset(self):
-        self.questionset = self.questionset[:self.total_questions_nr]
-
-    def get_new_question(self):        
-        self.question= self.questionset[self.current_question_nr]
-        self.current_question_nr += 1
-        self.save()
+    def get_question(self):        
+        return list(self.questionset.all())[self.current_question_index]
 
     def start_new_game(self):
         "Create, shuffle questionset and get first question"
-        self.get_category_questions()
-        self.shuffle_questions()
-        self.create_questionset()
-        self.get_new_question()
+        questions = list(Question.objects.filter(category=self.category))
+        print (questions)
+        shuffle(questions)
+        print (questions)
+        questions = questions[:self.total_number_of_questions]
+        print (questions)
+
+        for question in questions:
+            self.questionset.add(question)
         self.save()
 
     def add_score(self):        
         self.total_score += 10
+
 
     
 
