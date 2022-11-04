@@ -46,8 +46,7 @@ def question(request, game_id):
             answers = question.get_shuffled_answers()
 
         context = {'question':question, 'answers':answers, 'game':game}
-        return render(request, 'quiz/question.html', context)
-    
+        return render(request, 'quiz/question.html', context)    
     else:
         return redirect('quiz:scoreboard', game.id)
 
@@ -64,11 +63,22 @@ def options(request):
 
 
 def scoreboard(request, game_id=0):
+    context= {}
+
     if game_id:
-        game = Game.objects.get(id=game_id)
-        context = {'game':game}
+        player_game = Game.objects.get(id=game_id)
+        context['game']=player_game
+
+
+    games = list(Game.objects.filter(is_finished=True).order_by('-total_score'))    
+    scoreboard_rows = 10
+
+    while len(games) < scoreboard_rows:
+        games.append(None)
     else:
-        context= {}
+        games = enumerate((games)[:scoreboard_rows])
+        context['games']=games
+    
     return render(request, 'quiz/scoreboard.html', context)
 
 
