@@ -26,6 +26,7 @@ def question(request, game_id):
     player_answer = request.POST.get('player_answer')
 
     while not game.is_finished:
+        print (game.pet)
         if request.method == 'POST':
             prev_question = game.get_question()
             if prev_question.answer_is_true(player_answer):
@@ -39,11 +40,21 @@ def question(request, game_id):
                 continue
             question = game.get_question()
             answers = question.get_shuffled_answers()
+            answers = [('A', answers[0]),
+                    ('B', answers[1]),
+                    ('C', answers[2]),
+                    ('D', answers[3]),
+            ]
 
         elif request.method != 'POST':
             game.start_new_game()
             question = game.get_question()
             answers = question.get_shuffled_answers()
+            answers = [('A', answers[0]),
+                    ('B', answers[1]),
+                    ('C', answers[2]),
+                    ('D', answers[3]),
+            ]
 
         context = {'question':question, 'answers':answers, 'game':game}
         return render(request, 'quiz/question.html', context)    

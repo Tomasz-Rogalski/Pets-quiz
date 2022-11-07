@@ -1,3 +1,44 @@
 body {
-    background-color: #ddd;
+    background: #fff;
+    color: black;
+    font-size: 20px;
+    font-family: 'Indie Flower', cursive;
+}
+
+.nav_image {
+    max-width: 6rem;
+    max-height: 6rem;
+}
+
+.background_image {
+    z-index: -100;
+}
+
+.mbtn {
+    padding:10px;
+    border: 0.1rem solid;
+    border-radius:60%;
+    background-color: transparent;
+    font-size: 3rem;
+}
+
+.mbtn:hover {
+    background-color: #eee;
+    transition: 0.5s;
+}
+
+.mimage {
+    max-width: 100%;
+    max-height: auto;
+}
+
+.pimage {
+    max-width: 50%;
+    max-height: auto;
+}
+
+@media screen and (max-width: 1000px) {
+    .body_image {
+        display: none !important;
+    }
 }

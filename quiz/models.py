@@ -62,11 +62,8 @@ class Game(models.Model):
     def start_new_game(self):
         "Create, shuffle questionset and get first question"
         questions = list(Question.objects.filter(category=self.category))
-        print (questions)
         shuffle(questions)
-        print (questions)
         questions = questions[:self.total_number_of_questions]
-        print (questions)
 
         for question in questions:
             self.questionset.add(question)

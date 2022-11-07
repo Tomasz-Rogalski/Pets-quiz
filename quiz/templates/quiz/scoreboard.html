@@ -1,41 +1,45 @@
 {% extends 'quiz/base.html' %}
 {% block content %}
 
-{% if game %}
-	<h1>Congratulations, {{game.player_name}}</h1> 
-	<h2>You have awarded {{game.total_score}} points!</h2> 
-{% endif %}
-	<h3 class="mt-5">Scoreboard:</h3>
-
-	<table class="table table-bordered" style="max-width: 800px;">
-		<thead>
-			<tr>
-				<th scope="col">#</th>
-				<th scope="col">Player</th>
-				<th scope="col">Pet</th>
-				<th scope="col">Score</th>
-			</tr>
-		</thead>
-		<tbody>
-			{% for nr, game in games %}
-				{% if game %}
-					<tr>
-						<th scope="row">{{nr|add:'1'}}</th>
-						<td>{{game.player_name}}</td>
-						<td>{{game.pet}}</td>
-						<td>{{game.total_score}}</td>
-					</tr>
-				{% else %}
-					<tr>
-						<th scope="row">{{nr|add:'1'}}</th>
-						<td>...</td>
-						<td>...</td>
-						<td>...</td>
-					</tr>
-				{% endif %}
-			{% endfor %}
-		</tbody>
-	</table>
-
+<div class="row">
+	{% if game %}
+	<div class="col-5 order-md-2 d-flex flex-column align-items-center justify-content-center">
+		<h1>Congratulations, {{game.player_name}} !</h1> 
+		<h2 class="pb-5">You have awarded {{game.total_score}} points!</h2>
+	</div>
+	{% endif %}
+	<div class="col-7">
+		<h1 class="pt-3 fw-bold">Scoreboard:</h1>
+		<table class="table table-bordered shadow" style="max-width: 800px;">
+			<thead>
+				<tr>
+					<th scope="col">#</th>
+					<th scope="col">Player</th>
+					<th scope="col">Pet</th>
+					<th scope="col">Score</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for nr, game in games %}
+					{% if game %}
+						<tr>
+							<th scope="row">{{nr|add:'1'}}</th>
+							<td>{{game.player_name}}</td>
+							<td>{{game.pet}}</td>
+							<td>{{game.total_score}}</td>
+						</tr>
+					{% else %}
+						<tr>
+							<th scope="row">{{nr|add:'1'}}</th>
+							<td>...</td>
+							<td>...</td>
+							<td>...</td>
+						</tr>
+					{% endif %}
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
 
 {% endblock content %}
