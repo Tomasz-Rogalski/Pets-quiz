@@ -12,7 +12,7 @@
 			{% if game.pet.name == "Dog" %}
 			<img class ="img-fluid" src="{% static 'images/dog.PNG' %}" alt="image">
 			{% endif %}
-			<p class="border rounded-pill text-center p-2">{% lorem 17 w %}</p>
+			<p class="border rounded-pill text-center p-2">{{pet_reaction}}</p>
 		</div>
 		<div class="container col-md-8 p-5 shadow">
 		  <h1 class="fw-bold ">Question : {{game.current_question_index|add:"1"}} / {{game.total_number_of_questions}}</h1>
