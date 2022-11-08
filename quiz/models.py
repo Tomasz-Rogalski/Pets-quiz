@@ -31,7 +31,7 @@ class Pet(models.Model):
     
     def roll_reaction_key(self):
         '''roll dictionary key for pet reaction'''
-        traits = [self.helpfulness, self.confidence, self.proudness]
+        traits = [self.proudness, self.helpfulness, self.confidnece,]
         key = ''
         for trait in traits:
             result = self.roll_reaction_success(trait)
@@ -45,9 +45,11 @@ class Pet(models.Model):
             '110':f"Poor human, the answer is {answer}.",
             '111':f"So easy. It's {answer}.",
             '010':f"I have no idea what is it, maybe {answer}?",
-            '011':f"I know it, the answer is {answer}.",
-            '000':'I have no idea what is it.',
-            '001':f"I'm sure it is not {answer}.",            
+            '011':f"The answer is {answer}!",
+            '000':'No idea...',
+            '001':f"I'm sure it is not {answer}.",
+            '101':f"I know it but i won't tell you.",
+
         }
         return reactions[key]
 

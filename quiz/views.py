@@ -24,10 +24,11 @@ def question(request, game_id):
 
     game = Game.objects.get(id=game_id)
     player_answer = request.POST.get('player_answer')
+    pet = game.pet
 
     while not game.is_finished:
-        print (game.pet)
         if request.method == 'POST':
+            # questions [2:]
             prev_question = game.get_question()
             if prev_question.answer_is_true(player_answer):
                 game.add_score()
@@ -45,9 +46,16 @@ def question(request, game_id):
                     ('C', answers[2]),
                     ('D', answers[3]),
             ]
+            # pet reaction
+            key = pet.roll_reaction_key()
+            pet_answer = pet.roll_answer(question)
+            pet_reaction = pet.check_reaction_key(key, pet_answer)
 
         elif request.method != 'POST':
-            game.start_new_game()
+            # first question
+            if not game.questionset.all():
+                # If questionset is empty roll questions
+                game.start_new_game()
             question = game.get_question()
             answers = question.get_shuffled_answers()
             answers = [('A', answers[0]),
@@ -55,8 +63,11 @@ def question(request, game_id):
                     ('C', answers[2]),
                     ('D', answers[3]),
             ]
+            #first pet reaction
+            pet_reaction = "I will try to help you but remember, it's your test."
 
-        context = {'question':question, 'answers':answers, 'game':game}
+
+        context = {'question':question, 'answers':answers, 'game':game, 'pet_reaction': pet_reaction}
         return render(request, 'quiz/question.html', context)    
     else:
         return redirect('quiz:scoreboard', game.id)
