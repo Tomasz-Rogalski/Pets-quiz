@@ -1,7 +1,6 @@
-from quiz.models import Category, Question
+from quiz.models import Category
 from mixer.backend.django import mixer
 import pytest
-
 
 @pytest.mark.django_db
 class TestModels():   
@@ -25,22 +24,21 @@ class TestModels():
         assert len(result)==3
 
     def test_pet_roll_answer(self):
-        pet = mixer.blend('quiz.Pet', knowledge=10)
+        pet = mixer.blend('quiz.Pet', knowledge=11)
         question = mixer.blend('quiz.Question', 
                                 true_answer = 't1',
                                 false_answer1 = 'f1',
                                 false_answer2 = 'f2',
                                 false_answer3 = 'f3',)
- 
+
         assert pet.roll_answer(question) == question.true_answer
 
     def test_pet_check_reaction_key(self):
         pet = mixer.blend('quiz.Pet',)
         key = '111'
-        answer = 'example_answer'
-        assert pet.check_reaction_key(key, answer) == "So easy. It's example_answer."
-
-
+        pet_answer = 'example_answer'
+        false_answer ='false'
+        assert pet.check_reaction_key(key, pet_answer, false_answer) == "So easy. It's example_answer."
 
     def test_question_get_shuffled_answers(self):
         question = mixer.blend('quiz.Question', 
@@ -71,11 +69,11 @@ class TestModels():
 
     def test_game_len_default(self):
         game = mixer.blend('quiz.Game')
-        assert len(game) == 5
+        assert len(game) == 10
 
     def test_game_len_custom(self):
-        game = mixer.blend('quiz.Game', total_number_of_questions=10)
-        assert len(game) == 10
+        game = mixer.blend('quiz.Game', total_number_of_questions=5)
+        assert len(game) == 5
 
     def test_game_add_score(self):
         game = mixer.blend('quiz.Game')
@@ -90,6 +88,3 @@ class TestModels():
         question = game.get_question()
 
         assert question == new_question
-
-        
-

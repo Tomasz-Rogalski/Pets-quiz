@@ -1,27 +1,16 @@
+'''basic import for rendering html pages and redirecting user'''
 from django.shortcuts import render, redirect
 from .models import Game
-from random import shuffle
 from .forms import GameForm
 
 def home(request):
+    '''Render home page'''
     context = {}
     return render(request, 'quiz/home.html', context)
 
-# def question(request, question_id):
-#     question = Question.objects.get(id=question_id)
-#     answers = [
-#         question.true_answer,
-#         question.false_answer1,
-#         question.false_answer2,
-#         question.false_answer3,
-#         ]
-#     shuffle(answers)
-
-#     context = {'question':question, 'answers':answers}
-#     return render(request, 'quiz/question.html', context)
-
 def question(request, game_id):
-
+    '''Render single question page'''
+    print(request)
     game = Game.objects.get(id=game_id)
     player_answer = request.POST.get('player_answer')
     pet = game.pet
@@ -32,8 +21,7 @@ def question(request, game_id):
             prev_question = game.get_question()
             if prev_question.answer_is_true(player_answer):
                 game.add_score()
-            
-            game.current_question_index+=1            
+            game.current_question_index+=1
             game.save()
             if game.current_question_index >= len(game):
                 game.is_finished = True
@@ -49,7 +37,8 @@ def question(request, game_id):
             # pet reaction
             key = pet.roll_reaction_key()
             pet_answer = pet.roll_answer(question)
-            pet_reaction = pet.check_reaction_key(key, pet_answer)
+            false_answer = question.get_random_false_answer()
+            pet_reaction = pet.check_reaction_key(key=key, pet_answer=pet_answer, false_answer=false_answer)
 
         elif request.method != 'POST':
             # first question
@@ -67,12 +56,13 @@ def question(request, game_id):
             pet_reaction = "I will try to help you but remember, it's your test."
 
 
-        context = {'question':question, 'answers':answers, 'game':game, 'pet_reaction': pet_reaction}
-        return render(request, 'quiz/question.html', context)    
+        context ={'question':question, 'answers':answers, 'game':game, 'pet_reaction': pet_reaction}
+        return render(request, 'quiz/question.html', context)
     else:
         return redirect('quiz:scoreboard', game.id)
 
 def options(request):
+    '''Render pre-game page with basic game options form'''
     if request.method != 'POST':
         form = GameForm()
         context = {'form':form}
@@ -85,23 +75,20 @@ def options(request):
 
 
 def scoreboard(request, game_id=0):
-    context= {}
+    '''Render scoreboard page'''
 
+    context= {}
     if game_id:
         player_game = Game.objects.get(id=game_id)
         context['game']=player_game
 
-
-    games = list(Game.objects.filter(is_finished=True).order_by('-total_score'))    
+    games = list(Game.objects.filter(is_finished=True).order_by('-total_score'))
     scoreboard_rows = 10
 
     while len(games) < scoreboard_rows:
         games.append(None)
-    else:
-        games = enumerate((games)[:scoreboard_rows])
-        context['games']=games
-    
+
+    games = enumerate((games)[:scoreboard_rows])
+    context['games']=games
+
     return render(request, 'quiz/scoreboard.html', context)
-
-
-    

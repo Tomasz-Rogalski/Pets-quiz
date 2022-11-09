@@ -1,34 +1,36 @@
-from django.db import models
+'''import ranom module methods'''
 from random import shuffle, randint, choice
+from django.db import models
+
 
 class Category(models.Model):
     """Category type of questions, first of 2 base game options"""
     name = models.CharField(max_length = 24)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 class Pet(models.Model):
     """Player's companion, second of base game options"""
     name = models.CharField(max_length = 24)
 
-    proudness = models.IntegerField(default=5) 
+    proudness = models.IntegerField(default=5)
     helpfulness = models.IntegerField(default=5)
-    confidnece = models.IntegerField(default=5)    
+    confidnece = models.IntegerField(default=5)
 
-    knowledge = models.IntegerField(default=5)      
+    knowledge = models.IntegerField(default=5)
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 
     def roll_reaction_success(self, trait):
         '''If pet's trait is high, retrun succes (1)'''
         if randint(0, 10) < trait:
             return 1
-        else: 
+        else:
             return 0
-    
+
     def roll_reaction_key(self):
         '''roll dictionary key for pet reaction'''
         traits = [self.proudness, self.helpfulness, self.confidnece,]
@@ -38,17 +40,17 @@ class Pet(models.Model):
             key += str(result)
         return key
 
-    def check_reaction_key(self, key, answer):
-        '''Pet reaction'''
+    def check_reaction_key(self, key, pet_answer, false_answer):
+        '''Pet reaction. Check the key, get reaction and pre-rolled answer or false answer'''
         reactions = {
             '100':"You must be kidding, you should know it.",
-            '110':f"Poor human, the answer is {answer}.",
-            '111':f"So easy. It's {answer}.",
-            '010':f"I have no idea what is it, maybe {answer}?",
-            '011':f"The answer is {answer}!",
+            '110':f"Poor human, the answer is {pet_answer}.",
+            '111':f"So easy. It's {pet_answer}.",
+            '010':f"I have no idea what is it, maybe {pet_answer}?",
+            '011':f"The answer is {pet_answer}!",
             '000':'No idea...',
-            '001':f"I'm sure it is not {answer}.",
-            '101':f"I know it but i won't tell you.",
+            '001':f"I'm sure it is not {false_answer}.",
+            '101':"I know it but i won't tell you.",
 
         }
         return reactions[key]
@@ -63,20 +65,20 @@ class Pet(models.Model):
 
 class Question(models.Model):
     '''Single question model'''
-
     category = models.ForeignKey(Category, on_delete= models.PROTECT)
     text = models.TextField()
-
     true_answer = models.CharField(max_length=64)
     false_answer1 = models.CharField(max_length=64)
     false_answer2 = models.CharField(max_length=64)
     false_answer3 = models.CharField(max_length=64)
 
     def get_random_false_answer(self):
+        '''Return random false answer'''
         false_answers = [self.false_answer1, self.false_answer2, self.false_answer3]
         return choice(false_answers)
 
     def get_shuffled_answers(self):
+        '''Return list of shuffled answers'''
         answers = [self.true_answer,
             self.false_answer1,
             self.false_answer2,
@@ -85,6 +87,7 @@ class Question(models.Model):
         return answers
 
     def answer_is_true(self, answer):
+        '''Check is answer true or not'''
         if answer == self.true_answer:
             return True
         else:
@@ -99,14 +102,15 @@ class Game(models.Model):
 
     total_score = models.IntegerField(default = 0)
     current_question_index = models.IntegerField(default = 0)
-    total_number_of_questions = models.IntegerField(default = 5)
+    total_number_of_questions = models.IntegerField(default = 10)
 
     questionset = models.ManyToManyField(Question)
 
     def __len__(self):
-        return self.total_number_of_questions
+        return abs(self.total_number_of_questions)
 
-    def get_question(self):        
+    def get_question(self):
+        '''Get current question from questionset'''
         return list(self.questionset.all())[self.current_question_index]
 
     def start_new_game(self):
@@ -119,11 +123,6 @@ class Game(models.Model):
             self.questionset.add(question)
         self.save()
 
-    def add_score(self):        
+    def add_score(self):
+        '''Add ten points for true answer'''
         self.total_score += 10
-
-
-    
-
-
-
