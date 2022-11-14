@@ -1,4 +1,3 @@
-'''basic import for rendering html pages and redirecting user'''
 from django.shortcuts import render, redirect
 from .models import Game
 from .forms import GameForm
@@ -10,7 +9,6 @@ def home(request):
 
 def question(request, game_id):
     '''Render single question page'''
-    print(request)
     game = Game.objects.get(id=game_id)
     player_answer = request.POST.get('player_answer')
     pet = game.pet
@@ -54,7 +52,6 @@ def question(request, game_id):
             ]
             #first pet reaction
             pet_reaction = "I will try to help you but remember, it's your test."
-
 
         context ={'question':question, 'answers':answers, 'game':game, 'pet_reaction': pet_reaction}
         return render(request, 'quiz/question.html', context)
