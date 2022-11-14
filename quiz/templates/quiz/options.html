@@ -1,0 +1,56 @@
+{% extends 'quiz/base.html' %}
+{% load static %}
+{% block content %}
+
+  <div class="row p-5 gutter-0">
+    <div class="col-md-4 p-2 shadow text-center">
+
+      <div class="card mb-3" style="max-width: 540px; border:none;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{% static 'images/cat.PNG' %}" class="img-fluid rounded-start pt-5" alt="cat imge">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title fw-bold fs-3">Cat</h5>
+              <p class="card-text pt-3 text-start">Clever and stoic, but proud and lazy.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card mb-3" style="max-width: 540px; border:none;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="{% static 'images/dog.PNG' %}" class="img-fluid rounded-start pt-5" alt="dog image">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title fw-bold fs-3">Dog</h5>
+              <p class="card-text pt-3 text-start">Eager and helpful, but overconfident.</p>
+            </div>
+          </div>
+        </div>
+        <p class="pt-3 text-secondary">Be careful, pets may be wrong !</p>
+      </div>      
+    </div>
+    <div class="container col-md-8 p-5 shadow">
+      <form action="{% url 'quiz:options' %}" method="post" class = 'row'>
+        {% csrf_token %}
+        <div class="mb-4 col-12">
+          <label for="player_name" class="form-label fs-4 fw-bold">Enter your name :</label>
+          {{form.player_name}}
+        </div>
+        <div class="mb-4 col-6">
+          <label for="player_name" class="form-label fs-4 fw-bold">Select category :</label>
+          {{form.category}}
+        </div>
+        <div class="mb-4 col-6">
+          <label for="player_name" class="form-label fs-4 fw-bold" value="">Select your pet :</label>
+          {{form.pet}}
+        </div>
+        <div class="col-12"><button class="mbtn">Start!</button></div>
+      </form> 
+    </div>
+  </div>
+
+{% endblock content %}

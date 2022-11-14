@@ -1,0 +1,19 @@
+{% extends 'quiz/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row p-5 gutter-0">
+    <div class="col-md-4 p-2 shadow">
+        <img class ="img-fluid" src="{% static 'images/sketch.PNG' %}" alt="image">
+    </div>
+    <div class="container col-md-8 p-5 shadow">
+      <h1 class="display-5 fw-bold ">Welcome, Human!</h1>
+      <p class="fs-4 text-secondary">Glad you are here! Take a part in our quiz and check your knowledge in choosen category. Dont be afraid, we will try to help you!</p>
+      <p class="float-end fst-italic fs-4">Mr. Cat &  Mr. Dog</p>
+      <a class ="fs-3 p-2" href="{% url 'quiz:options' %}">
+          <button class="mbtn">Play!</button>
+        </a>      
+    </div>
+  </div>
+
+{% endblock content %}
