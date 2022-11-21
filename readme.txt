@@ -3,3 +3,5 @@ Player can enter his name, select companion and category of questions.
 The companion will try to help the player but may be wrong, it doesnt know everythong.
 Highscores are stored in scoreaboard.
 
+App was created using django and other modules (check requirements.txt).
+
